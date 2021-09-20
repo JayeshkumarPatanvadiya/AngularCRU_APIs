@@ -1,6 +1,7 @@
 ﻿using AngularCRU_APIs.Data;
 using AngularCRU_APIs.Models;
 using AngularCRU_APIs.Services.Classes;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,6 +15,7 @@ namespace AngularCRU_APIs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[DisableCors]
     public class WorkoutsController : ControllerBase
     {
         private readonly WorkoutContext _context;
@@ -26,6 +28,27 @@ namespace AngularCRU_APIs.Controllers
             _context = context;
             _workoutServices = workoutServices;
         }
+        
+
+        [HttpGet]
+        public ActionResult GetRecords()
+        {
+            
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+        
+            List<Workout> workout = (from workout1 in this._context.Workout.Take(10)
+                                     select workout1).ToList();
+            
+            if (workout == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(workout);
+        }
         // GET: api/Workouts/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetWorkout([FromRoute] int id)
@@ -36,7 +59,7 @@ namespace AngularCRU_APIs.Controllers
             }
 
              var workout = await _context.Workout.SingleOrDefaultAsync(m => m.Id == id);
-            // var workout = await  _workoutServices.GetWorkout(id);
+             //var workout1 =   _workoutServices.GetWorkout(id);
             if (workout == null)
             {
                 return NotFound();
@@ -120,36 +143,6 @@ namespace AngularCRU_APIs.Controllers
         {
             return _context.Workout.Any(e => e.Id == id);
         }
-        // GET: api/<WorkoutsController>
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        //// GET api/<WorkoutsController>/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        //// POST api/<WorkoutsController>
-        //[HttpPost]
-        //public void Post([FromBody] string value)
-        //{
-        //}
-
-        //// PUT api/<WorkoutsController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE api/<WorkoutsController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+        
     }
 }

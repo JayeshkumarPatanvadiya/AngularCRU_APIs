@@ -1,4 +1,6 @@
 using AngularCRU_APIs.Data;
+using AngularCRU_APIs.Repository.Classes;
+using AngularCRU_APIs.Services.Classes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,20 +33,27 @@ namespace AngularCRU_APIs
             services.AddDbContext<WorkoutContext>(options =>
   options.UseSqlServer(Configuration.GetConnectionString("WorkoutContext")));
             services.AddSwaggerGen();
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy("CorsPolicy",
-            //        builder => builder.AllowAnyOrigin()
-            //        .AllowAnyMethod()
-            //        .AllowAnyHeader()
-            //        .AllowCredentials());
-            //});
+            services.AddScoped(typeof(IWorkoutRepository<>), typeof(WorkoutRepository<>));
+            services.AddTransient<WorkoutServices, WorkoutServices>();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    name: "AllowOrigin",
+                    builder => {
+                        builder.AllowAnyOrigin()
+                                .AllowAnyMethod()
+                                .AllowAnyHeader();
+                    });
+            });
+           
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("AllowOrigin");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -61,10 +70,12 @@ namespace AngularCRU_APIs
                 endpoints.MapControllers();
             });
             app.UseSwagger();
-            app.UseSwaggerUI(c => {
+            app.UseSwaggerUI(c =>
+            {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V2");
             });
-            //app.UseCors("CorsPolicy");
+
+           
 
         }
     }
