@@ -23,25 +23,25 @@ namespace AngularCRU_APIs.Controllers
         private WorkoutServices _workoutServices;
 
 
-        public WorkoutsController(WorkoutContext context,WorkoutServices workoutServices)
+        public WorkoutsController(WorkoutContext context, WorkoutServices workoutServices)
         {
             _context = context;
             _workoutServices = workoutServices;
         }
-        
+
 
         [HttpGet]
         public ActionResult GetRecords()
         {
-            
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-        
-            List<Workout> workout = (from workout1 in this._context.Workout.Take(10)
+
+            List<Workout> workout = (from workout1 in this._context.Workout.Take(10000)
                                      select workout1).ToList();
-            
+
             if (workout == null)
             {
                 return NotFound();
@@ -50,23 +50,23 @@ namespace AngularCRU_APIs.Controllers
             return Ok(workout);
         }
         // GET: api/Workouts/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetWorkout([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetWorkout([FromRoute] int id)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-             var workout = await _context.Workout.SingleOrDefaultAsync(m => m.Id == id);
-             //var workout1 =   _workoutServices.GetWorkout(id);
-            if (workout == null)
-            {
-                return NotFound();
-            }
+        //     var workout = await _context.Workout.SingleOrDefaultAsync(m => m.Id == id);
+        //     //var workout1 =   _workoutServices.GetWorkout(id);
+        //    if (workout == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return Ok(workout);
-        }
+        //    return Ok(workout);
+        //}
 
         // PUT: api/Workouts/5
         [HttpPut("{id}")]
@@ -111,11 +111,20 @@ namespace AngularCRU_APIs.Controllers
             {
                 return BadRequest(ModelState);
             }
+            try
+            {
+                _context.Workout.Add(workout);
+                workout.InsertDateTime = DateTime.Now;
+    
+                    
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+            }
 
-            _context.Workout.Add(workout);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetWorkout", new { id = workout.Id }, workout);
+            return CreatedAtAction("GetRecords", new { id = workout.Id }, workout);
         }
 
         // DELETE: api/Workouts/5
@@ -143,6 +152,6 @@ namespace AngularCRU_APIs.Controllers
         {
             return _context.Workout.Any(e => e.Id == id);
         }
-        
+
     }
 }
