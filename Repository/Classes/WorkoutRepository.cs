@@ -23,9 +23,5 @@ namespace AngularCRU_APIs.Repository.Classes
             return ((IEnumerable<T>)workout);
         }
 
-        public void InsertPastCompanyDetails(T obj)
-        {
-            table.Add(obj);
-        }
     }
 }
