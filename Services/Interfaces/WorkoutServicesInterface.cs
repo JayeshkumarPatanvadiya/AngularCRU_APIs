@@ -9,5 +9,8 @@ namespace AngularCRU_APIs.Services.Interfaces
     public interface WorkoutServicesInterface
     {
         public Workout GetWorkout(int id);
+
+        public List<Workout> GetRecordsServices();
+
     }
 }

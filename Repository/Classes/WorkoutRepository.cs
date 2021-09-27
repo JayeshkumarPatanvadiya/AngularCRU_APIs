@@ -22,6 +22,34 @@ namespace AngularCRU_APIs.Repository.Classes
             var workout =  _context.Workout.SingleOrDefault(m => m.Id == id);
             return ((IEnumerable<T>)workout);
         }
+        public IEnumerable<T> GetRecords()
+        {
+            return table.ToList();
+        }
 
+
+        public void Insert(T obj)
+        {
+            table.Add(obj);
+        }
+
+
+        public void Update(T obj)
+        {
+            table.Attach(obj);
+            _context.Entry(obj).State = EntityState.Modified;
+        }
+
+        public void Delete(object id)
+        {
+            T existing = table.Find(id);
+            table.Remove(existing);
+        }
+
+
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
     }
 }

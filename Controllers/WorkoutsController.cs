@@ -39,8 +39,8 @@ namespace AngularCRU_APIs.Controllers
                 return BadRequest(ModelState);
             }
 
-            List<Workout> workout = (from workout1 in this._context.Workout.Take(10000)
-                                     select workout1).ToList();
+            List<Workout> workout = _workoutServices.GetRecordsServices();
+                                     
 
             if (workout == null)
             {
@@ -71,7 +71,7 @@ namespace AngularCRU_APIs.Controllers
         // PUT: api/Workouts/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutWorkout([FromRoute] int id, [FromBody] Workout workout)
-        {
+            {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -113,7 +113,7 @@ namespace AngularCRU_APIs.Controllers
             }
             try
             {
-                _context.Workout.Add(workout);
+                _workoutServices.InsertWorkout(workout);
                 workout.InsertDateTime = DateTime.Now;
     
                     

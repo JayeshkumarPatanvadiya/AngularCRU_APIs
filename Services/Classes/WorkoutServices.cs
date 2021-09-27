@@ -21,5 +21,30 @@ namespace AngularCRU_APIs.Services.Classes
             return (Workout)_WorkoutRepo.GetWorkout(id);
         }
 
+        public List<Workout> GetRecordsServices() => (List<Workout>)_WorkoutRepo.GetRecords();
+
+        public  void InsertWorkout(Workout workout)
+        {
+            _WorkoutRepo.Insert(workout);
+        }
+
+        public void UpdateWorkout(Workout workout)
+        {
+            _WorkoutRepo.Update(workout);
+        }
+        public void DeleteWorkout(int id)
+        {
+            var temp = _WorkoutRepo.GetWorkout(id);
+            _WorkoutRepo.Delete(temp);
+            _WorkoutRepo.Save();
+        }
+
+
+        public void Save()
+        {
+            _WorkoutRepo.Save();
+        }
+
+
     }
 }
