@@ -31,7 +31,7 @@ namespace AngularCRU_APIs.Controllers
 
 
         [HttpGet]
-        public ActionResult GetRecords()
+        public ActionResult GetRecords(int pageNo, int pageSize, string sortOrder)
         {
 
             if (!ModelState.IsValid)
@@ -82,11 +82,12 @@ namespace AngularCRU_APIs.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(workout).State = EntityState.Modified;
+            _workoutServices.UpdateWorkout(workout);
+           // _context.Entry(workout).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                 _workoutServices.Save();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -115,9 +116,10 @@ namespace AngularCRU_APIs.Controllers
             {
                 _workoutServices.InsertWorkout(workout);
                 workout.InsertDateTime = DateTime.Now;
-    
-                    
-                await _context.SaveChangesAsync();
+
+
+                  await _context.SaveChangesAsync();
+               // await _workoutServices.Save();
             }
             catch (Exception e)
             {
@@ -127,6 +129,29 @@ namespace AngularCRU_APIs.Controllers
             return CreatedAtAction("GetRecords", new { id = workout.Id }, workout);
         }
 
+        // DELETE: api/Workouts/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteWorkout([FromRoute] int id)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    var workout = await _context.Workout.SingleOrDefaultAsync(m => m.Id == id);
+        //   // var workout = _workoutServices.GetWorkout(id);
+        //    if (workout == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    //_context.Workout.Remove(workout);
+        //    _workoutServices.DeleteWorkout(id);
+        //    await _context.SaveChangesAsync();
+        //   // await _workoutServices.Save();
+
+        //    return Ok(workout);
+        //}
         // DELETE: api/Workouts/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWorkout([FromRoute] int id)

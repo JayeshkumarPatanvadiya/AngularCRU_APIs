@@ -17,7 +17,7 @@ namespace AngularCRU_APIs.Repository.Classes
             this._context = context;
             table = context.Set<T>();
         }
-        public IEnumerable<T> GetWorkout(int id)
+        public   IEnumerable<T> GetWorkout(int id)
         {
             var workout =  _context.Workout.SingleOrDefault(m => m.Id == id);
             return ((IEnumerable<T>)workout);
@@ -28,9 +28,9 @@ namespace AngularCRU_APIs.Repository.Classes
         }
 
 
-        public void Insert(T obj)
+        public  void Insert(T obj)
         {
-            table.Add(obj);
+            table.AddAsync(obj);
         }
 
 
