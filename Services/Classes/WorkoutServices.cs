@@ -18,7 +18,7 @@ namespace AngularCRU_APIs.Services.Classes
 
         public Workout GetWorkout(int id)
         {
-            return (Workout)_WorkoutRepo.GetWorkout(id);
+            return (Workout)_WorkoutRepo.GetById(id);
         }
 
         public List<Workout> GetRecordsServices() => (List<Workout>)_WorkoutRepo.GetRecords();
@@ -32,17 +32,36 @@ namespace AngularCRU_APIs.Services.Classes
         {
             _WorkoutRepo.Update(workout);
         }
-        public void DeleteWorkout(int id)
+        public async void DeleteWorkout(int id)
         {
-            var temp = _WorkoutRepo.GetWorkout(id);
-            _WorkoutRepo.Delete(temp);
-            _WorkoutRepo.Save();
+            try
+            {              
+                _WorkoutRepo.Delete(id);
+               await _WorkoutRepo.SaveAsync();
+            }
+            catch(Exception e)
+            {
+
+            }
+           
         }
 
-
-        public void Save()
+        public bool WorkoutExists(int id)
         {
-            _WorkoutRepo.Save();
+            var temp =   _WorkoutRepo.GetById(id);
+            if(temp != null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public async Task SaveAsync()
+        {
+           await _WorkoutRepo.SaveAsync();
         }
 
 

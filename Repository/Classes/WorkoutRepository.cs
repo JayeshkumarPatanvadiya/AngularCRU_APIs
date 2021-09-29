@@ -22,6 +22,15 @@ namespace AngularCRU_APIs.Repository.Classes
             var workout =  _context.Workout.SingleOrDefault(m => m.Id == id);
             return ((IEnumerable<T>)workout);
         }
+
+
+         public T GetById(object id)
+        {
+            return table.Find(id);
+        }
+
+
+
         public IEnumerable<T> GetRecords()
         {
             return table.ToList();
@@ -40,16 +49,22 @@ namespace AngularCRU_APIs.Repository.Classes
             _context.Entry(obj).State = EntityState.Modified;
         }
 
-        public void Delete(object id)
+        public  void Delete(object id)
         {
             T existing = table.Find(id);
             table.Remove(existing);
         }
 
 
-        public void Save()
+        //public async void Save()
+        //{
+        //    //  _context.SaveChanges();
+        // await   _context.SaveChangesAsync();
+        //}
+
+        public async Task SaveAsync()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

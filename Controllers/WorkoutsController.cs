@@ -18,12 +18,12 @@ namespace AngularCRU_APIs.Controllers
     //[DisableCors]
     public class WorkoutsController : ControllerBase
     {
-        private readonly WorkoutContext _context;
 
+        private readonly WorkoutContext _context;
         private WorkoutServices _workoutServices;
 
 
-        public WorkoutsController(WorkoutContext context, WorkoutServices workoutServices)
+        public WorkoutsController(WorkoutServices workoutServices, WorkoutContext context)
         {
             _context = context;
             _workoutServices = workoutServices;
@@ -50,23 +50,23 @@ namespace AngularCRU_APIs.Controllers
             return Ok(workout);
         }
         // GET: api/Workouts/5
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetWorkout([FromRoute] int id)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetWorkout([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //     var workout = await _context.Workout.SingleOrDefaultAsync(m => m.Id == id);
-        //     //var workout1 =   _workoutServices.GetWorkout(id);
-        //    if (workout == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var workout = _workoutServices.GetWorkout(id);
+            //var workout1 =   _workoutServices.GetWorkout(id);
+            if (workout == null)
+            {
+                return NotFound();
+            }
 
-        //    return Ok(workout);
-        //}
+            return Ok(workout);
+        }
 
         // PUT: api/Workouts/5
         [HttpPut("{id}")]
@@ -83,11 +83,10 @@ namespace AngularCRU_APIs.Controllers
             }
 
             _workoutServices.UpdateWorkout(workout);
-           // _context.Entry(workout).State = EntityState.Modified;
 
             try
             {
-                 _workoutServices.Save();
+               await  _workoutServices.SaveAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -116,10 +115,7 @@ namespace AngularCRU_APIs.Controllers
             {
                 _workoutServices.InsertWorkout(workout);
                 workout.InsertDateTime = DateTime.Now;
-
-
-                  await _context.SaveChangesAsync();
-               // await _workoutServices.Save();
+                await _workoutServices.SaveAsync();
             }
             catch (Exception e)
             {
@@ -129,30 +125,7 @@ namespace AngularCRU_APIs.Controllers
             return CreatedAtAction("GetRecords", new { id = workout.Id }, workout);
         }
 
-        // DELETE: api/Workouts/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteWorkout([FromRoute] int id)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    var workout = await _context.Workout.SingleOrDefaultAsync(m => m.Id == id);
-        //   // var workout = _workoutServices.GetWorkout(id);
-        //    if (workout == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    //_context.Workout.Remove(workout);
-        //    _workoutServices.DeleteWorkout(id);
-        //    await _context.SaveChangesAsync();
-        //   // await _workoutServices.Save();
-
-        //    return Ok(workout);
-        //}
-        // DELETE: api/Workouts/5
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWorkout([FromRoute] int id)
         {
@@ -160,22 +133,27 @@ namespace AngularCRU_APIs.Controllers
             {
                 return BadRequest(ModelState);
             }
+           
+            var workout = _workoutServices.GetWorkout(id);
 
-            var workout = await _context.Workout.SingleOrDefaultAsync(m => m.Id == id);
             if (workout == null)
             {
                 return NotFound();
             }
 
             _context.Workout.Remove(workout);
+           //  _workoutServices.DeleteWorkout(id);
             await _context.SaveChangesAsync();
+            //await _workoutServices.SaveAsync();
+
 
             return Ok(workout);
         }
 
         private bool WorkoutExists(int id)
         {
-            return _context.Workout.Any(e => e.Id == id);
+            //return _context.Workout.Any(e => e.Id == id);
+            return _workoutServices.WorkoutExists(id);
         }
 
     }

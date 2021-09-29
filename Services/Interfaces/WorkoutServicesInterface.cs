@@ -12,5 +12,6 @@ namespace AngularCRU_APIs.Services.Interfaces
 
         public List<Workout> GetRecordsServices();
 
+
     }
 }
