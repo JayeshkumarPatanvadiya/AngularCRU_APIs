@@ -138,3 +138,8 @@ D:\AngularCRU_APIs\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Swagger.dll
 D:\AngularCRU_APIs\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\AngularCRU_APIs\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll
 D:\AngularCRU_APIs\obj\Debug\netcoreapp3.1\AngularCRU_APIs.MvcApplicationPartsAssemblyInfo.cs
+D:\AngularCRU_APIs\bin\Debug\netcoreapp3.1\AngularAPIs\web.config
+D:\AngularCRU_APIs\bin\Debug\netcoreapp3.1\AngularAPIs\AngularCRU_APIs.deps.json
+D:\AngularCRU_APIs\bin\Debug\netcoreapp3.1\AngularAPIs\AngularCRU_APIs.runtimeconfig.json
+D:\AngularCRU_APIs\bin\Debug\netcoreapp3.1\AngularAPIs\appsettings.Development.json
+D:\AngularCRU_APIs\bin\Debug\netcoreapp3.1\AngularAPIs\appsettings.json
