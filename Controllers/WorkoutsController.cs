@@ -1,12 +1,13 @@
 ﻿using AngularCRU_APIs.Data;
+using AngularCRU_APIs.JwtFeatures;
 using AngularCRU_APIs.Models;
 using AngularCRU_APIs.Services.Classes;
-using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,16 +22,31 @@ namespace AngularCRU_APIs.Controllers
 
         private readonly WorkoutContext _context;
         private WorkoutServices _workoutServices;
+        private readonly JwtHandler _jwtHandler;
 
 
-        public WorkoutsController(WorkoutServices workoutServices, WorkoutContext context)
+
+        public WorkoutsController(WorkoutServices workoutServices, WorkoutContext context, JwtHandler jwtHandler)
         {
             _context = context;
             _workoutServices = workoutServices;
+            _jwtHandler = jwtHandler;
+        }
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] Workout userForAuthentication)
+        {
+            var user = await _context.FindAsync(userForAuthentication.Email);
+            if (user == null || !await _context.CheckPasswordAsync(user, userForAuthentication.Password))
+                return Unauthorized(new AuthResponseDto { ErrorMessage = "Invalid Authentication" });
+            var signingCredentials = _jwtHandler.GetSigningCredentials();
+            var claims = _jwtHandler.GetClaims(user);
+            var tokenOptions = _jwtHandler.GenerateTokenOptions(signingCredentials, claims);
+            var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            return Ok(new AuthResponseDto { IsAuthSuccessful = true, Token = token });
         }
 
-
         [HttpGet]
+        [Authorize]
         public ActionResult GetRecords(int pageNo, int pageSize, string sortOrder)
         {
 

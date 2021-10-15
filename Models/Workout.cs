@@ -19,5 +19,14 @@ namespace AngularCRU_APIs.Models
 
         public DateTime InsertDateTime { get; set; }
 
+        public string Email { get; set; }
+        public string Password { get; set; }
+
+    }
+    public class AuthResponseDto
+    {
+        public bool IsAuthSuccessful { get; set; }
+        public string ErrorMessage { get; set; }
+        public string Token { get; set; }
     }
 }

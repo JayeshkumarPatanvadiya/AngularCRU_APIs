@@ -143,3 +143,4 @@ D:\AngularCRU_APIs\bin\Debug\netcoreapp3.1\AngularAPIs\AngularCRU_APIs.deps.json
 D:\AngularCRU_APIs\bin\Debug\netcoreapp3.1\AngularAPIs\AngularCRU_APIs.runtimeconfig.json
 D:\AngularCRU_APIs\bin\Debug\netcoreapp3.1\AngularAPIs\appsettings.Development.json
 D:\AngularCRU_APIs\bin\Debug\netcoreapp3.1\AngularAPIs\appsettings.json
+D:\AngularCRU_APIs\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
