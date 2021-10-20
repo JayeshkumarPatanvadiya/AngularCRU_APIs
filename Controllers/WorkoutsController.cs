@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace AngularCRU_APIs.Controllers
 {
+  
     [Route("api/[controller]")]
     [ApiController]
     //[DisableCors]
@@ -32,18 +33,18 @@ namespace AngularCRU_APIs.Controllers
             _workoutServices = workoutServices;
             _jwtHandler = jwtHandler;
         }
-        [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] Workout userForAuthentication)
-        {
-            var user = await _context.FindAsync(userForAuthentication.Email);
-            if (user == null || !await _context.CheckPasswordAsync(user, userForAuthentication.Password))
-                return Unauthorized(new AuthResponseDto { ErrorMessage = "Invalid Authentication" });
-            var signingCredentials = _jwtHandler.GetSigningCredentials();
-            var claims = _jwtHandler.GetClaims(user);
-            var tokenOptions = _jwtHandler.GenerateTokenOptions(signingCredentials, claims);
-            var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            return Ok(new AuthResponseDto { IsAuthSuccessful = true, Token = token });
-        }
+        //[HttpPost("Login")]
+        //public async Task<IActionResult> Login([FromBody] Workout workout)
+        //{
+        //    var user = await _context.FindAsync(workout.Email);
+        //    if (user == null || !await _context.CheckPasswordAsync(user, workout.Password))
+        //        return Unauthorized(new AuthResponseDto { ErrorMessage = "Invalid Authentication" });
+        //    var signingCredentials = _jwtHandler.GetSigningCredentials();
+        //    var claims = _jwtHandler.GetClaims(user);
+        //    var tokenOptions = _jwtHandler.GenerateTokenOptions(signingCredentials, claims);
+        //    var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+        //    return Ok(new AuthResponseDto { IsAuthSuccessful = true, Token = token });
+        //}
 
         [HttpGet]
         [Authorize]

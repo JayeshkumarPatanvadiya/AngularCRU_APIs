@@ -1,3 +1,4 @@
+using AngularCRU_APIs.Authentication;
 using AngularCRU_APIs.Data;
 using AngularCRU_APIs.JwtFeatures;
 using AngularCRU_APIs.Repository.Classes;
@@ -5,6 +6,7 @@ using AngularCRU_APIs.Services.Classes;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,8 +29,14 @@ namespace AngularCRU_APIs
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            // For Entity Framework 
             services.AddDbContext<WorkoutContext>(options =>
   options.UseSqlServer(Configuration.GetConnectionString("WorkoutContext")));
+
+            // For Entity Framework  
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("WorkoutContext")));
+
+
             services.AddSwaggerGen();
             services.AddScoped(typeof(IWorkoutRepository<>), typeof(WorkoutRepository<>));
             services.AddTransient<WorkoutServices, WorkoutServices>();
@@ -43,27 +51,36 @@ namespace AngularCRU_APIs
                     });
             });
 
-            var jwtSettings = Configuration.GetSection("JwtSettings");
-            services.AddAuthentication(opt =>
+          
+
+            services.AddScoped<JwtHandler>();
+
+            // For Identity  
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            // Adding Authentication  
+            services.AddAuthentication(options =>
             {
-                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+
+            // Adding Jwt Bearer  
+            .AddJwtBearer(options =>
             {
-                options.TokenValidationParameters = new TokenValidationParameters
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-
-                    ValidIssuer = jwtSettings.GetSection("validIssuer").Value,
-                    ValidAudience = jwtSettings.GetSection("validAudience").Value,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("securityKey").Value))
+                    ValidIssuer = Configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
                 };
             });
-
-            services.AddScoped<JwtHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
