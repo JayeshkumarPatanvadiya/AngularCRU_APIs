@@ -1,4 +1,5 @@
 ﻿using AngularCRU_APIs.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -55,7 +56,7 @@ namespace AngularCRU_APIs.Controllers
                 var token = new JwtSecurityToken(
                     issuer: _configuration["JWT:ValidIssuer"],
                     audience: _configuration["JWT:ValidAudience"],
-                    expires: DateTime.Now.AddHours(3),
+                    expires: DateTime.Now.AddSeconds(120),
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                     );
@@ -75,7 +76,7 @@ namespace AngularCRU_APIs.Controllers
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!"  });
 
             ApplicationUser user = new ApplicationUser()
             {
@@ -84,12 +85,16 @@ namespace AngularCRU_APIs.Controllers
                 UserName = model.Username
             };
             var result = await userManager.CreateAsync(user, model.Password);
+            
+                        var errors = result.Errors.Select(e => e.Description); 
+
             if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." , Errors = Convert.ToString(errors) });
 
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
 
+        [Authorize]
         [HttpPost]
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterModel model)
@@ -105,6 +110,8 @@ namespace AngularCRU_APIs.Controllers
                 UserName = model.Username
             };
             var result = await userManager.CreateAsync(user, model.Password);
+            var errors = result.Errors.Select(e => e.Description);
+
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." + result.Errors });
 

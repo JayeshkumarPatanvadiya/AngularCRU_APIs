@@ -23,15 +23,15 @@ namespace AngularCRU_APIs.Controllers
 
         private readonly WorkoutContext _context;
         private WorkoutServices _workoutServices;
-        private readonly JwtHandler _jwtHandler;
+        //private readonly JwtHandler _jwtHandler;
 
 
 
-        public WorkoutsController(WorkoutServices workoutServices, WorkoutContext context, JwtHandler jwtHandler)
+        public WorkoutsController(WorkoutServices workoutServices, WorkoutContext context)
         {
             _context = context;
             _workoutServices = workoutServices;
-            _jwtHandler = jwtHandler;
+            //_jwtHandler = jwtHandler;
         }
         //[HttpPost("Login")]
         //public async Task<IActionResult> Login([FromBody] Workout workout)
@@ -47,8 +47,9 @@ namespace AngularCRU_APIs.Controllers
         //}
 
         [HttpGet]
-        [Authorize]
-        public ActionResult GetRecords(int pageNo, int pageSize, string sortOrder)
+        //[Authorize]
+        [AllowAnonymous]
+        public ActionResult GetRecords()
         {
 
             if (!ModelState.IsValid)

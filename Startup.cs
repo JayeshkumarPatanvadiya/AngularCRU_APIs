@@ -53,7 +53,7 @@ namespace AngularCRU_APIs
 
           
 
-            services.AddScoped<JwtHandler>();
+            //services.AddScoped<JwtHandler>();
 
             // For Identity  
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -77,6 +77,7 @@ namespace AngularCRU_APIs
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
+                    ValidAudience = Configuration["JWT:ValidAudience"],
                     ValidIssuer = Configuration["JWT:ValidIssuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
                 };
