@@ -76,7 +76,7 @@ namespace AngularCRU_APIs.Controllers
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!"  });
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
 
             ApplicationUser user = new ApplicationUser()
             {
@@ -85,11 +85,11 @@ namespace AngularCRU_APIs.Controllers
                 UserName = model.Username
             };
             var result = await userManager.CreateAsync(user, model.Password);
-            
-                        var errors = result.Errors.Select(e => e.Description); 
+
+            var errors = result.Errors.Select(e => e.Description);
 
             if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." , Errors = Convert.ToString(errors) });
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again.", Errors = Convert.ToString(errors) });
 
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }

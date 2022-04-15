@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\AngularCRU_APIs\\AngularCRU_APIs.csproj": {}
+    "D:\\JayeshkumarPatanvadiya\\Project\\AngularCRU_APIs\\AngularCRU_APIs.csproj": {}
   },
   "projects": {
-    "D:\\AngularCRU_APIs\\AngularCRU_APIs.csproj": {
+    "D:\\JayeshkumarPatanvadiya\\Project\\AngularCRU_APIs\\AngularCRU_APIs.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\AngularCRU_APIs\\AngularCRU_APIs.csproj",
+        "projectUniqueName": "D:\\JayeshkumarPatanvadiya\\Project\\AngularCRU_APIs\\AngularCRU_APIs.csproj",
         "projectName": "AngularCRU_APIs",
-        "projectPath": "D:\\AngularCRU_APIs\\AngularCRU_APIs.csproj",
+        "projectPath": "D:\\JayeshkumarPatanvadiya\\Project\\AngularCRU_APIs\\AngularCRU_APIs.csproj",
         "packagesPath": "C:\\Users\\Albiorix Technology\\.nuget\\packages\\",
-        "outputPath": "D:\\AngularCRU_APIs\\obj\\",
+        "outputPath": "D:\\JayeshkumarPatanvadiya\\Project\\AngularCRU_APIs\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Albiorix Technology\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -76,6 +76,10 @@
               "target": "Package",
               "version": "[3.1.20, )"
             },
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+              "target": "Package",
+              "version": "[1.11.1, )"
+            },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[3.1.5, )"
@@ -111,7 +115,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

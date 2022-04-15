@@ -17,14 +17,14 @@ namespace AngularCRU_APIs.Repository.Classes
             this._context = context;
             table = context.Set<T>();
         }
-        public   IEnumerable<T> GetWorkout(int id)
+        public IEnumerable<T> GetWorkout(int id)
         {
-            var workout =  _context.Workout.SingleOrDefault(m => m.Id == id);
+            var workout = _context.Workout.SingleOrDefault(m => m.Id == id);
             return ((IEnumerable<T>)workout);
         }
 
 
-         public T GetById(object id)
+        public T GetById(object id)
         {
             return table.Find(id);
         }
@@ -37,7 +37,7 @@ namespace AngularCRU_APIs.Repository.Classes
         }
 
 
-        public  void Insert(T obj)
+        public void Insert(T obj)
         {
             table.AddAsync(obj);
         }
@@ -49,7 +49,7 @@ namespace AngularCRU_APIs.Repository.Classes
             _context.Entry(obj).State = EntityState.Modified;
         }
 
-        public  void Delete(object id)
+        public void Delete(object id)
         {
             T existing = table.Find(id);
             table.Remove(existing);

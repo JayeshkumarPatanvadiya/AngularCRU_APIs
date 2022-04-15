@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace AngularCRU_APIs.Controllers
 {
-  
+
     [Route("api/[controller]")]
     [ApiController]
     //[DisableCors]
@@ -58,7 +58,7 @@ namespace AngularCRU_APIs.Controllers
             }
 
             List<Workout> workout = _workoutServices.GetRecordsServices();
-                                     
+
 
             if (workout == null)
             {
@@ -89,7 +89,7 @@ namespace AngularCRU_APIs.Controllers
         // PUT: api/Workouts/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutWorkout([FromRoute] int id, [FromBody] Workout workout)
-            {
+        {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -104,7 +104,7 @@ namespace AngularCRU_APIs.Controllers
 
             try
             {
-               await  _workoutServices.SaveAsync();
+                await _workoutServices.SaveAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -143,7 +143,7 @@ namespace AngularCRU_APIs.Controllers
             return CreatedAtAction("GetRecords", new { id = workout.Id }, workout);
         }
 
-        
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWorkout([FromRoute] int id)
         {
@@ -151,7 +151,7 @@ namespace AngularCRU_APIs.Controllers
             {
                 return BadRequest(ModelState);
             }
-           
+
             var workout = _workoutServices.GetWorkout(id);
 
             if (workout == null)
@@ -160,7 +160,7 @@ namespace AngularCRU_APIs.Controllers
             }
 
             _context.Workout.Remove(workout);
-           //  _workoutServices.DeleteWorkout(id);
+            //  _workoutServices.DeleteWorkout(id);
             await _context.SaveChangesAsync();
             //await _workoutServices.SaveAsync();
 
